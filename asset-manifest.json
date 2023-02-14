@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/react-box-content-planner/static/css/main.7acaea2f.css",
-    "main.js": "/react-box-content-planner/static/js/main.07d3183d.js",
-    "index.html": "/react-box-content-planner/index.html",
-    "main.7acaea2f.css.map": "/react-box-content-planner/static/css/main.7acaea2f.css.map",
-    "main.07d3183d.js.map": "/react-box-content-planner/static/js/main.07d3183d.js.map"
+    "main.css": "/box-content-planner/static/css/main.7acaea2f.css",
+    "main.js": "/box-content-planner/static/js/main.07d3183d.js",
+    "index.html": "/box-content-planner/index.html",
+    "main.7acaea2f.css.map": "/box-content-planner/static/css/main.7acaea2f.css.map",
+    "main.07d3183d.js.map": "/box-content-planner/static/js/main.07d3183d.js.map"
   },
   "entrypoints": [
     "static/css/main.7acaea2f.css",
