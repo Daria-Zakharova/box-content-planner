@@ -1,0 +1,1 @@
+export const products = ["wicked witch", "dire wolf", "alice", "cat butt", "dragon"];
