@@ -2,7 +2,7 @@
   "name": "react-homework-template",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://daria-zakharova.github.io/react-box-content-planner/",
+  "homepage": "https://daria-zakharova.github.io/box-content-planner/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.4",
