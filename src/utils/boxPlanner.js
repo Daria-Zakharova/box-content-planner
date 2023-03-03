@@ -1,8 +1,33 @@
-import { addToArrOrUpdAmount } from "./checkByName";
-import { lastOf } from "./lastOf";
+class Box {
+    constructor ({item, capacity}) {
+        
+        this.content = [];
+        this.free = capacity;
+        this.add(item);
+    }
 
-export class boxesPlanner {
-    constructor (products, capacity = 140, extraItem = {name: "wicked witch"}) {
+    add(item) {
+        this.content.push(item);
+        this.free -= item.amount;
+    }
+
+    addPart(item) {
+        const part = this.free;
+        this.content.push({...item, amount: part});
+        this.free = 0;
+    }
+
+    hasCapacity({amount}) {
+        return this.free >= amount;
+    }
+
+    isFull() {
+        return this.free === 0;
+    }
+}
+
+export class BoxesPlanner {
+    constructor (products, capacity) {
         // console.log(products);
 
         const productsProcessed = JSON.parse(JSON.stringify(products)).sort((a, b) => b.amount - a.amount);
@@ -11,31 +36,18 @@ export class boxesPlanner {
         this.boxes = [];
 
         this.makeOneItemBoxes(productsProcessed);
-        productsProcessed.some(({amount}) => amount > 0) && productsProcessed.forEach(this.put);
+        productsProcessed.filter(({amount}) => amount > 0).forEach(this.put);
         
-        if (lastOf(this.boxes).free > 0) {
-            const extraItemAmount = lastOf(this.boxes).free;
-            this.fillLastBox(extraItem);
-            this.sortBoxesByAmount();
-            return {boxes: this.boxes, extraItem: {name: extraItem.name, amount: extraItemAmount}};
-        }
-
-        this.sortBoxesByAmount();
-        return {boxes: this.boxes, extraItem: null};
+        return this.prepareBoxes();
     }
 
     createBox = item => {
-        this.boxes.push({
-            content: item ? [{...item}] : [], 
-            free: this.boxCapacity - item.amount,
-            addItem(item) {this.content.push({...item}); this.free -= item.amount;},
-            addPartOfItem(item) { this.content.push({...item, amount: this.free});  this.free -= lastOf(this.content).amount;}
-        });
+        this.boxes.push(new Box({item, capacity: this.boxCapacity}));
     }
 
-    findBoxForItem = ({amount}) => this.boxes.find(({free}) => free >= amount);   
+    findBoxForItem = (item) => this.boxes.find(box => box.hasCapacity(item));   
 
-    findBoxForPartOfItem = () => this.boxes.find(({free}) => free > 0);
+    findBoxForPartOfItem = () => this.boxes.find(box => !box.isFull());
        
     makeOneItemBoxes = items => {
         const capacity =  this.boxCapacity;
@@ -58,7 +70,7 @@ export class boxesPlanner {
     put = item => {
         let suitableBox = this.findBoxForItem(item);
         if(suitableBox) {
-            suitableBox.addItem(item);
+            suitableBox.add({...item});
             item.amount = 0;
             return;
         }
@@ -66,23 +78,16 @@ export class boxesPlanner {
         suitableBox = this.findBoxForPartOfItem(item);
         if(suitableBox) {
             const part = suitableBox.free;
-            suitableBox.addPartOfItem(item);
+            suitableBox.addPart(item);
             item.amount -= part;
         }
         else {
-            this.createBox(item);
+            this.createBox({...item});
             item.amount = 0;
         }
 
         item.amount > 0 && this.put(item);    
     }
 
-    fillLastBox = (itemToAdd, box = lastOf(this.boxes)) => {
-        addToArrOrUpdAmount(box.content, {name: itemToAdd.name, amount: box.free});
-        box.free = 0;
-    }
-
-    sortBoxesByAmount = () => {
-        this.boxes.forEach(box => box.content.sort((a, b) => b.amount - a.amount));
-    }
+    prepareBoxes = () => this.boxes.map(({content}) => {return {content: content.sort((a, b) => b.amount - a.amount)}});
 }

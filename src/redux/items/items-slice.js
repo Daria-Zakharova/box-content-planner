@@ -2,22 +2,32 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 const initialItemsState = {
     items: [],
+    settings: {boxCapacity: null},
+    boxes: [],
 };
 
 const itemsSlice = createSlice({
     name: 'items',
     initialState: initialItemsState,
     reducers: {
-        addProducts(state, action) {
+        setProducts(state, action) {
             return {...state, items: [...action.payload]};
         },
         resetProducts(state) {
             return {...state, items: []};
-        }
-        
+        },
+        setBoxCapacity(state, action) {
+            return {...state, settings: {boxCapacity: action.payload}};
+        },
+        setBoxes(state, action) {
+            return {...state, boxes: [...action.payload]}
+        },
+        resetBoxes(state) {
+            return {...state, boxes: []};
+        }        
     }
 });
 
 
-export const {addProducts, resetProducts} = itemsSlice.actions;
+export const {setProducts, resetProducts, setBoxCapacity, setBoxes, resetBoxes} = itemsSlice.actions;
 export const itemsReducer = itemsSlice.reducer;

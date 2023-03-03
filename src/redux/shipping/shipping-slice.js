@@ -1,7 +1,8 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
 const initialShippingState = {
-lists: []
+	currentBoxId: "DF11670 1",
+	lists: [],
 };
 
 const shippingSlice = createSlice({
@@ -15,6 +16,9 @@ const shippingSlice = createSlice({
 		deleteList (state, action) {
 			return {...state, lists: state.lists.filter(list => list.id !== action.payload)};
 		},
+		setCurrentBoxId (state, action) {
+			return {...state, currentBoxId: action.payload};
+		}
 		/* editList (state, action) {
 			const idx = state.lists.findIndex(list => list.id = action.payload.id);
 			state.lists[idx] = action.payload;
@@ -24,7 +28,7 @@ const shippingSlice = createSlice({
 	}
 });
 
-export const {addList, deleteList} = shippingSlice.actions;
+export const {addList, deleteList, setCurrentBoxId} = shippingSlice.actions;
 export const shippingReducer = shippingSlice.reducer;
 /* 
 list = {

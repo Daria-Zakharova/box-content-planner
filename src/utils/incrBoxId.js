@@ -1,0 +1,1 @@
+export const incrBoxId = boxId => boxId.split(' ')[0] + ' ' + (Number(boxId.split(' ')[1]) + 1);

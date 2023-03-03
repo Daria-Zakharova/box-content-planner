@@ -15,7 +15,7 @@ const toggleForm = () => {
         
         <Modal open={formIsOpened} keepMounted sx={{overflow: "auto"}}> 
             <Zoom in={formIsOpened}>       
-                <Box p = {{xs: 1, sm: 2, md: 3}} sx={{backgroundColor: "mainBg", maxWidth:"95%", width: "500px", minHeight: "300px",margin: "200px auto auto", paddingBottom: "5rem", position: "relative"}}>
+                <Box p = {{xs: 1, sm: 2, md: 3}} sx={{backgroundColor: "mainBg", maxWidth:"95%", width: "500px", minHeight: "300px",margin: "200px auto auto", position: "relative"}}>
                     <AddProductForm handleClose={toggleForm}/>
                 </Box>
             </Zoom>
