@@ -18,7 +18,6 @@ export const BoxList = () => {
     const boxes = useSelector(selectBoxes);
 
     if(!boxes.length){
-        console.log("here");
         boxes.push(...new BoxesPlanner(items, boxCapacity));
         
     }
@@ -28,7 +27,6 @@ export const BoxList = () => {
         id: Date.now(),
         items,
         boxes: boxes.map(box => {
-            console.log("hello");
             const id = currentBoxId;
             currentBoxId = incrBoxId(currentBoxId);            
             return {id, ...box};

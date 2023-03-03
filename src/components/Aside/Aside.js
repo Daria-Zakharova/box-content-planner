@@ -7,7 +7,6 @@ import { resetBoxes, setBoxes } from "redux/items/items-slice";
 import { deleteList } from "redux/shipping/shipping-slice";
 
 const AsideItem = ({listId, items, handleClick}) => {
-    // const dispatch = useDispatch();
     const date = new Date(listId);
     return (
         <Accordion>
@@ -27,10 +26,10 @@ const AsideItem = ({listId, items, handleClick}) => {
 
 export const Aside = ({isOpen, toggle}) => {
   const dispatch = useDispatch();
-    const lists = useSelector(selectLists);
-    const handleClick = boxes => {console.log("boxes is", boxes); dispatch(setBoxes(boxes))}; 
-    console.log(lists); 
-    return (<SwipeableDrawer
+  const lists = useSelector(selectLists);
+  const handleClick = boxes => {dispatch(setBoxes(boxes))}; 
+
+  return (<SwipeableDrawer
             anchor="left"
             open={isOpen}
             onClose={toggle}
