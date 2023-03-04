@@ -14,7 +14,7 @@ import { selectBoxCapacity } from "redux/items/selectors";
 export const AddProductForm = ({handleClose}) => {
     const dispatch = useDispatch();
     const [inputFields, setInputFields] = useState([{name: "", amount: 1}]);
-    const boxCapacity = useSelector(selectBoxCapacity) || 140;
+    const boxCapacity = useSelector(selectBoxCapacity);
     const [settings, setSettings] = useState({extraItem: "wicked witch", boxCapacity});
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settingsAnchorEl, setSettingsAnchorEl] = useState(null);

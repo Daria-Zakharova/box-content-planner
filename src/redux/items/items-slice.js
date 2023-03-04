@@ -2,7 +2,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 
 const initialItemsState = {
     items: [],
-    settings: {boxCapacity: 140},
+    boxCapacity: 140,
     boxes: [],
 };
 
