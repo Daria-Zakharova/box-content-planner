@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/box-content-planner/static/css/main.7acaea2f.css",
-    "main.js": "/box-content-planner/static/js/main.b33dfec5.js",
+    "main.js": "/box-content-planner/static/js/main.16c613c3.js",
     "index.html": "/box-content-planner/index.html",
     "main.7acaea2f.css.map": "/box-content-planner/static/css/main.7acaea2f.css.map",
-    "main.b33dfec5.js.map": "/box-content-planner/static/js/main.b33dfec5.js.map"
+    "main.16c613c3.js.map": "/box-content-planner/static/js/main.16c613c3.js.map"
   },
   "entrypoints": [
     "static/css/main.7acaea2f.css",
-    "static/js/main.b33dfec5.js"
+    "static/js/main.16c613c3.js"
   ]
 }
