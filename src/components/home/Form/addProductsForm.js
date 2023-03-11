@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, FormGroup, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts, setBoxCapacity, resetBoxes } from "redux/items/items-slice";
