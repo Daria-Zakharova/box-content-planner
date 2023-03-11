@@ -17,6 +17,8 @@ export const BoxList = () => {
     const boxCapacity = useSelector(selectBoxCapacity);
     const boxes = [...useSelector(selectBoxes)];
     let currentBoxId = getCurrentId(useSelector(selectLists)) || presetBoxId;
+  
+  console.log(boxes, "boxes", boxes.length, "boxes.length", items, "items");
 
     if(!boxes.length){
         boxes.push(...new BoxesPlanner(items, boxCapacity));    
