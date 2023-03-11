@@ -1,4 +1,4 @@
-import { BoxList } from "components/BoxList/BoxList";
+import { BoxList } from "components/boxes/BoxList/BoxList";
 
 export const Boxes = () => {
 

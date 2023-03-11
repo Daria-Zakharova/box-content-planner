@@ -1,7 +1,7 @@
 import { Boxes } from "pages/Boxes";
 import { Home } from "pages/Home";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
-import { SharedLayout } from "./SharedLayout/SharedLayout";
+import { SharedLayout } from "./layout/SharedLayout/SharedLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

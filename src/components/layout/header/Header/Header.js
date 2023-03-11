@@ -1,6 +1,6 @@
 import { Box, Container} from "@mui/material"
-import { Navigation } from "components/Navigation/Navigation"
-import { PageTitle } from "components/PageTitle/PageTitle"
+import { Navigation } from "components/layout/header/Navigation/Navigation"
+import { PageTitle } from "components/layout/header/PageTitle/PageTitle"
 
 export const Header = ({onClickMenu}) => {
     return (

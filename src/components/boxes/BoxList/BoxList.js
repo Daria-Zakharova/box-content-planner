@@ -15,14 +15,13 @@ export const BoxList = () => {
 
     const items = useSelector(selectProducts);
     const boxCapacity = useSelector(selectBoxCapacity);
-    const boxes = useSelector(selectBoxes);
-
-    if(!boxes.length){
-        boxes.push(...new BoxesPlanner(items, boxCapacity));
-        
-    }
+    const boxes = [...useSelector(selectBoxes)];
     let currentBoxId = getCurrentId(useSelector(selectLists)) || presetBoxId;
 
+    if(!boxes.length){
+        boxes.push(...new BoxesPlanner(items, boxCapacity));    
+    }
+    
     const list = {
         id: Date.now(),
         items,
@@ -32,6 +31,7 @@ export const BoxList = () => {
             return {id, ...box};
         })
     }
+
     return (
         <>
             {boxes.length > 0 && 

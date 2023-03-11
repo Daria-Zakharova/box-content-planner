@@ -1,7 +1,7 @@
 import { Container, Stack } from "@mui/material"
-import { Aside } from "components/Aside/Aside"
-import { Footer } from "components/Footer/Footer"
-import { Header } from "components/Header/Header"
+import { Aside } from "components/layout/Aside/Aside"
+import { Footer } from "components/layout/Footer/Footer"
+import { Header } from "components/layout/header/Header/Header"
 import { useState } from "react"
 import { Outlet } from "react-router-dom"
 

@@ -17,7 +17,7 @@ const itemsSlice = createSlice({
             return {...state, items: []};
         },
         setBoxCapacity(state, action) {
-            return {...state, settings: {boxCapacity: action.payload}};
+            return {...state, boxCapacity: action.payload};
         },
         setBoxes(state, action) {
             return {...state, boxes: [...action.payload]}

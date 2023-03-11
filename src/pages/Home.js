@@ -1,5 +1,5 @@
 import { Box, Button, Modal, Zoom } from "@mui/material";
-import { AddProductForm } from "components/Form/addProductsForm";
+import { AddProductForm } from "components/home/Form/addProductsForm";
 import { useState } from "react";
 
 // Jumping box let's have some fun and make some boxes!

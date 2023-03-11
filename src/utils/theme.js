@@ -14,7 +14,8 @@ export const theme = createTheme({
         },
         paper: "#fff9",
         mainBg: "#ffe8d6",
-        header: "#cb997e",
+        // header: "#cb997e",
+        header: "#DCBBA8",
     },
     typography: {
         mainTitle: {

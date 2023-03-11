@@ -1,23 +1,22 @@
-import { Autocomplete, Box, Button, FormGroup, Popover, Stack, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, FormGroup, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { setProducts, setBoxCapacity, resetBoxes } from "redux/items/items-slice";
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import { products } from "data/productsList";
 import { Navigate } from "react-router-dom";
 import { addExtraItem } from "utils/addExtraItem";
 import { selectBoxCapacity } from "redux/items/selectors";
+import { FormSettings } from "components/home/FormSettings/FormSettings";
 
 export const AddProductForm = ({handleClose}) => {
     const dispatch = useDispatch();
     const [inputFields, setInputFields] = useState([{name: "", amount: 1}]);
     const boxCapacity = useSelector(selectBoxCapacity);
     const [settings, setSettings] = useState({extraItem: "wicked witch", boxCapacity});
-    const [settingsOpen, setSettingsOpen] = useState(false);
-    const [settingsAnchorEl, setSettingsAnchorEl] = useState(null);
+
     const [submitted, setSubmitted] = useState(false);
 
     const handleChange = ({newValue, idx, dataType}) => {
@@ -35,13 +34,17 @@ export const AddProductForm = ({handleClose}) => {
         const newInputFields = [...inputFields];
         newInputFields.splice(idx, 1);
         setInputFields(newInputFields);
-    } 
+    }
+    
+    const handleSettingsSubmit = (settingsData) => {
+        setSettings(settingsData);
+        dispatch(setBoxCapacity(+settingsData.boxCapacity));
+    }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {    
         const products = addExtraItem({arrOfProducts: inputFields, extraItem: settings.extraItem, capacity: settings.boxCapacity});
         dispatch(setProducts(products));
-        dispatch(setBoxCapacity(settings.boxCapacity));
+        dispatch(setBoxCapacity(+settings.boxCapacity));
         dispatch(resetBoxes());
         setSubmitted(true); 
     };
@@ -53,12 +56,13 @@ export const AddProductForm = ({handleClose}) => {
                     <Button onClick={handleClose} sx={{padding: "0.5rem",minWidth:"fit-content"}}><CloseRoundedIcon/></Button>
                 </Stack>
 
-            <FormGroup>
+            
                 {inputFields.map((inputField, idx, arr) => {
                 return (
                 <Stack key={idx} direction="row" spacing={{xs: 1, sm: 1, md: 2}} sx={{ position: "relative", marginBottom: "20px"}} pr={arr.length === 1 ? "calc(80px + 1rem)" : "calc(40px + .5rem)"}>
                     <Autocomplete
                         options={products}
+                        required
                         freeSolo
                         value = {inputField.name}
                         onChange = {(_, newValue) => {handleChange({newValue, idx, dataType: "name"})}}
@@ -67,10 +71,14 @@ export const AddProductForm = ({handleClose}) => {
                         size="small"
                         sx={{width: "10rem", flexGrow: 1, backgroundColor: "paper"}}/>
 
-                    <TextField
+                    <TextField                        
                         label="Amount"
-                        type="number"
                         value={inputField.amount}
+                        InputProps={{
+                            inputProps: { 
+                                required: true,
+                                type: "number",
+                                min: 1 }}}
                         name = "amount"
                         onChange= {e => {handleChange({newValue: e.target.value, idx, dataType: "amount"})}}
                         size="small"
@@ -80,38 +88,11 @@ export const AddProductForm = ({handleClose}) => {
                     {idx === (arr.length - 1) && <Button type="button" onClick={handleInputAdd} variant="contained" sx={{position: "absolute", right: 0, top: 0, bottom: 0, padding: "0.5rem", minWidth:"fit-content"}}> <AddCircleIcon/></Button> }
                 </Stack>)
             })}
-            </FormGroup>
-            <Button type="button" onClick={(e) => {setSettingsAnchorEl(e.currentTarget); setSettingsOpen(!settingsOpen)}} sx={{ marginBottom: "3rem", padding: "0.5rem", minWidth:"fit-content"}}><SettingsSuggestRoundedIcon/></Button>
-            <Popover open={settingsOpen} onClose={() => {setSettingsOpen(false)}} anchorEl={settingsAnchorEl} anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}>
-                <FormGroup style={{padding: "1rem"}}>
-                    <Stack direction="row" spacing={{xs: 1, sm: 1, md: 2}}>
-                        <Autocomplete
-                        options={products}
-                        freeSolo
-                        value = {settings.extraItem}
-                        onChange = {(_, newValue) => {setSettings({...settings, extraItem: newValue})}}
-                        onInputChange =  {(_, newValue) => {setSettings({...settings, extraItem: newValue})}}
-                        renderInput={(params) => <TextField {...params} label = "Extra item" name = "name"/>}
-                        size="small"
-                        sx={{width: "10rem", flexGrow: 1, backgroundColor: "paper"}}/>
-
-                        <TextField
-                        label="Box size"
-                        type="number"
-                        value={settings.boxCapacity}
-                        name = "amount"
-                        onChange= {e => {setSettings({...settings, boxCapacity: e.currentTarget.value})}}
-                        size="small"
-                        sx={{width: "5rem", backgroundColor: "paper"}}/>
-                    </Stack>
-                </FormGroup>
-            </Popover>
+            
+            <FormSettings handleSubmit = {handleSettingsSubmit}/>
             <Button type="submit" variant="contained" sx={{position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)"}}> <CheckCircleOutlineRoundedIcon/> Submit</Button>
         </Box>)
             }
-            </> 
+        </> 
     );
 }
