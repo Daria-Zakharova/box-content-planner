@@ -8,17 +8,24 @@ import { addList, setCurrentBoxId } from "redux/shipping/shipping-slice";
 import { BoxesPlanner } from "utils/boxPlanner";
 import { incrBoxId } from "utils/incrBoxId";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export const BoxList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [saveBtnAdded, setSaveBtnAdded] = useState(false);
     const items = useSelector(selectProducts);
     const boxCapacity = useSelector(selectBoxCapacity);
     const boxes = [...useSelector(selectBoxes)];
+    const boxesRenderedFromTheList = useSelector(selectBoxes).length > 0;
     let currentBoxId = useSelector(selectBoxId);
 
+    useEffect(() => {
+        !boxesRenderedFromTheList && setSaveBtnAdded(true);
+    }, [boxesRenderedFromTheList])
+
     if(!boxes.length){
-        boxes.push(...new BoxesPlanner(items, boxCapacity));    
+        boxes.push(...new BoxesPlanner(items, boxCapacity));
     }
     
     const list = {
@@ -60,7 +67,7 @@ export const BoxList = () => {
                 )
             })}
         </Grid>
-        <Button 
+        {saveBtnAdded && <Button 
         type="button"
         variant="contained"  
         sx={{display: "block", margin: "1rem auto 3rem"}}
@@ -69,7 +76,7 @@ export const BoxList = () => {
             dispatch(resetProducts())
             dispatch(setCurrentBoxId(currentBoxId));
             navigate("/box-content-planner/");}} 
-            >Save list</Button>
+            >Save list</Button>}
             </>}
         </>
     )
