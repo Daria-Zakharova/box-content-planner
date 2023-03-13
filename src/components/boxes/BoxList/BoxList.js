@@ -2,23 +2,20 @@ import { Box, Button, capitalize, Card, List, ListItem, ListItemText, Stack, Typ
 import Grid from "@mui/material/Unstable_Grid2/Grid2"
 import { useDispatch, useSelector } from "react-redux";
 import { resetProducts} from "redux/items/items-slice";
-import { selectBoxId, selectLists } from "redux/shipping/selectors";
+import { selectBoxId } from "redux/shipping/selectors";
 import { selectBoxCapacity, selectBoxes, selectProducts} from "redux/items/selectors";
 import { addList, setCurrentBoxId } from "redux/shipping/shipping-slice";
 import { BoxesPlanner } from "utils/boxPlanner";
 import { incrBoxId } from "utils/incrBoxId";
-import { getCurrentId } from "utils/getCurrentId";
+import { useNavigate } from "react-router-dom";
 
 export const BoxList = () => {
     const dispatch = useDispatch();
-    const presetBoxId = useSelector(selectBoxId);
-
+    const navigate = useNavigate();
     const items = useSelector(selectProducts);
     const boxCapacity = useSelector(selectBoxCapacity);
     const boxes = [...useSelector(selectBoxes)];
-    let currentBoxId = getCurrentId(useSelector(selectLists)) || presetBoxId;
-  
-  console.log(boxes, "boxes", boxes.length, "boxes.length", items, "items");
+    let currentBoxId = useSelector(selectBoxId);
 
     if(!boxes.length){
         boxes.push(...new BoxesPlanner(items, boxCapacity));    
@@ -63,10 +60,16 @@ export const BoxList = () => {
                 )
             })}
         </Grid>
-        <Button variant="contained" type="button" onClick={() => {
+        <Button 
+        type="button"
+        variant="contained"  
+        sx={{display: "block", margin: "1rem auto 3rem"}}
+        onClick={() => {
             dispatch(addList(list)); 
             dispatch(resetProducts())
-            dispatch(setCurrentBoxId(currentBoxId));}} sx={{display: "block", margin: "1rem auto 3rem"}}>Save list</Button>
+            dispatch(setCurrentBoxId(currentBoxId));
+            navigate("/box-content-planner/");}} 
+            >Save list</Button>
             </>}
         </>
     )

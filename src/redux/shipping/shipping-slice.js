@@ -18,21 +18,12 @@ const shippingSlice = createSlice({
 		},
 		setCurrentBoxId (state, action) {
 			return {...state, currentBoxId: action.payload};
+		},
+		resetShippingState (state) {
+			return {...initialShippingState};
 		}
-		/* editList (state, action) {
-			const idx = state.lists.findIndex(list => list.id = action.payload.id);
-			state.lists[idx] = action.payload;
-			return state;
-		} */
-		
 	}
 });
 
-export const {addList, deleteList, setCurrentBoxId} = shippingSlice.actions;
+export const {addList, deleteList, setCurrentBoxId, resetShippingState} = shippingSlice.actions;
 export const shippingReducer = shippingSlice.reducer;
-/* 
-list = {
-	date: id,
-	name: "",
-	items: list of products,
-	boxes: list of boxes is formed in the app} */

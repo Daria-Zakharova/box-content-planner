@@ -1,8 +1,7 @@
 import { Box, Button, Modal, Zoom } from "@mui/material";
-import { AddProductForm } from "components/home/Form/addProductsForm";
+import { AddProductForm } from "components/home/Form/AddProductForm/AddProductsForm";
 import { useState } from "react";
 
-// Jumping box let's have some fun and make some boxes!
 export const Home = () => {
     const [formIsOpened, setFormIsOpened] = useState(false);
 

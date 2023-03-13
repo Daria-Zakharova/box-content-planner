@@ -1,27 +1,45 @@
-import { Autocomplete, Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Alert, Autocomplete, Box, Button, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
-import { setProducts, setBoxCapacity, resetBoxes } from "redux/items/items-slice";
+import { setProducts, setBoxCapacity, resetBoxes} from "redux/items/items-slice";
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { products } from "data/productsList";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addExtraItem } from "utils/addExtraItem";
-import { selectBoxCapacity } from "redux/items/selectors";
+import { selectBoxCapacity, selectProducts } from "redux/items/selectors";
 import { FormSettings } from "components/home/FormSettings/FormSettings";
+import { hasEmptyFields } from "utils/checkEmptyFields";
 
 export const AddProductForm = ({handleClose}) => {
     const dispatch = useDispatch();
-    const [inputFields, setInputFields] = useState([{name: "", amount: 1}]);
+    const navigate = useNavigate();
+    const presetItems = useSelector(selectProducts);
+    const [inputFields, setInputFields] = useState(presetItems.length ? [...presetItems] : [{name: "", amount: 1}]);
+    const [error, setError] = useState(false);
     const boxCapacity = useSelector(selectBoxCapacity);
     const [settings, setSettings] = useState({extraItem: "wicked witch", boxCapacity});
 
-    const [submitted, setSubmitted] = useState(false);
+    const setProductList = () => {
+        const products = addExtraItem({arrOfProducts: inputFields, extraItem: settings.extraItem, boxCapacity: settings.boxCapacity});
+        dispatch(setProducts([...products]));
+    }
 
     const handleChange = ({newValue, idx, dataType}) => {
-        const newInputFields = [...inputFields];
-        newInputFields[idx][dataType] = (dataType === "name" || !newValue) ? newValue : +newValue;
+        const newInputFields = inputFields.map((field, i) => {
+            if (i === idx) {
+                return { ...field, [dataType]: dataType === "name" ? newValue : +newValue };
+            }
+            return field;
+        });
+        try{
+            !hasEmptyFields(newInputFields) && setError(false);
+        }
+        catch(error) {
+            setError(error.message);
+        }    
         setInputFields(newInputFields);
     }
 
@@ -39,18 +57,32 @@ export const AddProductForm = ({handleClose}) => {
     const handleSettingsSubmit = (settingsData) => {
         setSettings(settingsData);
         dispatch(setBoxCapacity(+settingsData.boxCapacity));
+        setProductList();
     }
 
-    const handleSubmit = () => {    
-        const products = addExtraItem({arrOfProducts: inputFields, extraItem: settings.extraItem, capacity: settings.boxCapacity});
-        dispatch(setProducts(products));
-        dispatch(setBoxCapacity(+settings.boxCapacity));
-        dispatch(resetBoxes());
-        setSubmitted(true); 
+    const handleSubmit = e => {
+        e.preventDefault();
+        try {
+            hasEmptyFields(inputFields);
+            setError("");
+            setProductList();
+            dispatch(setBoxCapacity(+settings.boxCapacity));
+            dispatch(resetBoxes());
+            navigate("/box-content-planner/boxes");
+        }
+        catch (error) {
+            setError(error.message);
+        }       
     };
 
     return (
-            <> {submitted ? <Navigate to="/box-content-planner/boxes"/> : (<Box component="form" onSubmit={handleSubmit}>
+            <>
+            <Snackbar open={!!error} autoHideDuration={60}>
+            <Alert severity="error" sx={{ width: '100%' }}>
+                {error}
+                </Alert>
+            </Snackbar> 
+            <Box component="form" onSubmit={handleSubmit}>
                 <Stack direction="row" justifyContent="space-between" sx={{marginBottom: "32px"}} flexWrap>
                     <Typography variant="subTitle" sx={{margin: "0 auto"}}>The list of shipped items</Typography>
                     <Button onClick={handleClose} sx={{padding: "0.5rem",minWidth:"fit-content"}}><CloseRoundedIcon/></Button>
@@ -62,7 +94,6 @@ export const AddProductForm = ({handleClose}) => {
                 <Stack key={idx} direction="row" spacing={{xs: 1, sm: 1, md: 2}} sx={{ position: "relative", marginBottom: "20px"}} pr={arr.length === 1 ? "calc(80px + 1rem)" : "calc(40px + .5rem)"}>
                     <Autocomplete
                         options={products}
-                        required
                         freeSolo
                         value = {inputField.name}
                         onChange = {(_, newValue) => {handleChange({newValue, idx, dataType: "name"})}}
@@ -90,9 +121,12 @@ export const AddProductForm = ({handleClose}) => {
             })}
             
             <FormSettings handleSubmit = {handleSettingsSubmit}/>
-            <Button type="submit" variant="contained" sx={{position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)"}}> <CheckCircleOutlineRoundedIcon/> Submit</Button>
-        </Box>)
-            }
+            <Stack direction="row" spacing={{xs: 1, sm: 1, md: 2}} sx={{position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)"}}>
+                <Button type="submit" variant="contained"> <CheckCircleOutlineRoundedIcon/> Submit</Button>
+                {inputFields.length > 1 && <Button type="button" variant="contained" onClick={()=> {setInputFields( [{name: "", amount: 1}]);}}> <RestartAltRoundedIcon/> Reset</Button>}
+            </Stack>
+        </Box>
+            
         </> 
     );
 }
